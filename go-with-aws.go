@@ -2,7 +2,10 @@ package main
 
 import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
+
 	// "github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
+
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 )
@@ -25,6 +28,11 @@ func NewGoWithAwsStack(scope constructs.Construct, id string, props *GoWithAwsSt
 	// 	VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
 	// })
 
+	awslambda.NewFunction(stack, jsii.String("my-lambda-function"), &awslambda.FunctionProps{
+		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
+		Code:    awslambda.AssetCode_FromAsset(jsii.String("lambda/function.zip"), nil),
+		Handler: jsii.String("main"),
+	})
 	return stack
 }
 
@@ -33,7 +41,6 @@ func main() {
 	defer jsii.Close() // go 与 ts 沟通的桥梁 因为aws cdk 使用ts写的
 
 	app := awscdk.NewApp(nil)
-
 	NewGoWithAwsStack(app, "GoWithAwsStack", &GoWithAwsStackProps{
 		awscdk.StackProps{
 			Env: env(),
