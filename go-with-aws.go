@@ -2,10 +2,8 @@ package main
 
 import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsdynamodb"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
-
-	// "github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
-
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 )
@@ -28,11 +26,23 @@ func NewGoWithAwsStack(scope constructs.Construct, id string, props *GoWithAwsSt
 	// 	VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
 	// })
 
-	awslambda.NewFunction(stack, jsii.String("my-lambda-function"), &awslambda.FunctionProps{
+	myFunc := awslambda.NewFunction(stack, jsii.String("my-lambda-function"), &awslambda.FunctionProps{
 		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
 		Code:    awslambda.AssetCode_FromAsset(jsii.String("lambda/function.zip"), nil),
 		Handler: jsii.String("main"),
 	})
+
+	// create db table
+	table := awsdynamodb.NewTable(stack, jsii.String("my-user-table"), &awsdynamodb.TableProps{
+		PartitionKey: &awsdynamodb.Attribute{
+			Name: jsii.String("username"), // primary key
+			Type: awsdynamodb.AttributeType_STRING,
+		},
+		TableName:     jsii.String("user_table"),    //same as /lambda/database.TABLE_NAME
+		RemovalPolicy: awscdk.RemovalPolicy_DESTROY, //to be able to remove the DB with cdk destroy
+	})
+
+	table.GrantReadWriteData(myFunc) //!important
 	return stack
 }
 

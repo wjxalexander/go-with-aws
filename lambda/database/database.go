@@ -1,7 +1,7 @@
 package database
 
 import (
-	"lambda-func/types"
+	"lambda/types"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -49,7 +49,7 @@ func (u DynamoDBClient) DoesUserExist(username string) (bool, error) {
 	return true, nil
 }
 
-func (u DynamoDBClient) insertUser(user types.RegisterUser) error {
+func (u DynamoDBClient) InsertUser(user types.RegisterUser) error {
 	// assemble item
 	item := &dynamodb.PutItemInput{
 		TableName: aws.String(TABLE_NAME),

@@ -18,6 +18,8 @@ https://static.frontendmasters.com/assets/courses/2024-04-23-go-aws/go-aws-slide
 cdk init app --language go
 go get
 go get github.com/aws/aws-lambda-go/lambda
+
+Lambda
 in lambda dir:
 GOOS=linux GOARCH=amd64 go build -o bootstrap
 zip function.zip bootstrap
@@ -28,9 +30,11 @@ go build: This is the Go compiler command to build an executable from your sourc
 -o bootstrap: The -o flag specifies the output filename. In this case, the compiled executable will be named "bootstrap"
 
 
-cdk interaction 
+cdk interaction (at root dir)
 ```
 cdk bootstrap aws://ACCOUNT-NUMBER/REGION
 cdk diff
 cdk deploy
 ```
+
+check cloudFormation
