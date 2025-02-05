@@ -16,6 +16,12 @@ const (
 	TABLE_NAME = "user_table"
 )
 
+// define functions
+type UserStore interface {
+	DoesUserExist(username string) (bool, error)
+	InsertUser(user types.RegisterUser) error
+}
+
 // aws: session to connect db NewDynamoDBClient will generate a session
 func NewDynamoDBClient() DynamoDBClient {
 	dbSession := session.Must(session.NewSession())
