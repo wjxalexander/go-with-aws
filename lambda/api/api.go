@@ -52,8 +52,15 @@ func (api ApiHandler) RegisterUserHandler(request events.APIGatewayProxyRequest)
 			StatusCode: http.StatusConflict,
 		}, nil
 	}
+	user, err := types.NewUser(registerUser)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			Body:       "Intenal Server Error",
+			StatusCode: http.StatusInternalServerError,
+		}, err
+	}
 	// user not exists
-	err = api.daStore.InsertUser(registerUser)
+	err = api.daStore.InsertUser(user)
 	// fmt.Errorf("there is inster user error %w", error)
 	if err != nil {
 		return events.APIGatewayProxyResponse{

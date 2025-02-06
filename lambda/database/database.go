@@ -21,7 +21,7 @@ const (
 // define functions
 type UserStore interface {
 	DoesUserExist(username string) (bool, error)
-	InsertUser(user types.RegisterUser) error
+	InsertUser(user types.User) error
 }
 
 // aws: session to connect db NewDynamoDBClient will generate a session
@@ -57,7 +57,7 @@ func (u DynamoDBClient) DoesUserExist(username string) (bool, error) {
 	return true, nil
 }
 
-func (u DynamoDBClient) InsertUser(user types.RegisterUser) error {
+func (u DynamoDBClient) InsertUser(user types.User) error {
 	// assemble item
 	item := &dynamodb.PutItemInput{
 		TableName: aws.String(TABLE_NAME),
@@ -67,7 +67,7 @@ func (u DynamoDBClient) InsertUser(user types.RegisterUser) error {
 				S: aws.String(user.Username),
 			},
 			"password": {
-				S: aws.String(user.Password),
+				S: aws.String(user.PasswordHash),
 			},
 		},
 	}
