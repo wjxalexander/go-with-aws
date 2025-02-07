@@ -31,6 +31,8 @@ func main() {
 		switch requset.Path {
 		case "/register":
 			return myApp.ApiHandler.RegisterUserHandler(requset)
+		case "/login":
+			return myApp.ApiHandler.LoginUser(requset)
 		default:
 			return events.APIGatewayProxyResponse{
 				Body:       "not found",

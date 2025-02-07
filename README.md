@@ -33,6 +33,7 @@ go build: This is the Go compiler command to build an executable from your sourc
 cdk interaction (at root dir)
 ```
 cdk bootstrap aws://ACCOUNT-NUMBER/REGION
+// make sure the lambda function is built
 cdk diff
 cdk deploy
 ```

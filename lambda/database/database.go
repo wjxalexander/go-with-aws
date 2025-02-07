@@ -22,6 +22,7 @@ const (
 type UserStore interface {
 	DoesUserExist(username string) (bool, error)
 	InsertUser(user types.User) error
+	GetUser(username string) (types.User, error)
 }
 
 // aws: session to connect db NewDynamoDBClient will generate a session
@@ -75,13 +76,13 @@ func (u DynamoDBClient) InsertUser(user types.User) error {
 	return err
 }
 
-func (u DynamoDBClient) Getuser(username string) (types.User, error) {
+func (u DynamoDBClient) GetUser(username string) (types.User, error) {
 	var user types.User
 	result, err := u.databaseStore.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(TABLE_NAME),
 		Key: map[string]*dynamodb.AttributeValue{
 			"username": {
-				S: aws.String(user.Username),
+				S: aws.String(username),
 			},
 		},
 	})
@@ -97,3 +98,5 @@ func (u DynamoDBClient) Getuser(username string) (types.User, error) {
 	}
 	return user, nil
 }
+
+// curl -X POST https://kkqx5qn448.execute-api.eu-west-1.amazonaws.com/prod/register -H "Content-Type: application/json" -d '{"username":"Jingxin.Wang", "password":"Aa123456"}'
