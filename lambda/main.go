@@ -2,6 +2,7 @@ package main
 
 import (
 	"lambda/app"
+	"lambda/middleware"
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -24,6 +25,13 @@ type MyEvent struct {
 // 	return fmt.Sprintf("Successfully called by - %s", event.Username), nil
 // }
 
+func protectHanlder(requset events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return events.APIGatewayProxyResponse{
+		Body:       "secret place",
+		StatusCode: http.StatusOK,
+	}, nil
+}
+
 func main() {
 	myApp := app.NewApp()
 	// lambda.Start(myApp.ApiHandler.RegisterUserHandler)
@@ -33,6 +41,8 @@ func main() {
 			return myApp.ApiHandler.RegisterUserHandler(requset)
 		case "/login":
 			return myApp.ApiHandler.LoginUser(requset)
+		case "/protected":
+			return middleware.ValidateJWTMiddleware(protectHanlder)(requset)
 		default:
 			return events.APIGatewayProxyResponse{
 				Body:       "not found",

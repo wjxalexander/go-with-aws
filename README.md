@@ -39,3 +39,9 @@ cdk deploy
 ```
 
 check cloudFormation
+https://medium.com/@cheickzida/golang-implementing-jwt-token-authentication-bba9bfd84d60
+
+
+curl -X POST https://kkqx5qn448.execute-api.eu-west-1.amazonaws.com/prod/register -H "Content-Type: application/json" -d '{"username":"j.want", "password":"password"}'
+
+curl -X POST https://kkqx5qn448.execute-api.eu-west-1.amazonaws.com/prod/login -H "Content-Type: application/json" -d '{"username":"j.want", "password":"password"}'
